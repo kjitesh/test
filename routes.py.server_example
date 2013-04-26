@@ -1,0 +1,23 @@
+#Install this file as routes.py ONLY within the server environment
+
+default_application = 'web'
+default_controller = 'dashboard'
+default_action = 'index'
+
+routes_onerror = [
+    ('500/*', '/default/error'),
+]
+
+
+
+routes_in = (
+  ('/admin/(?P<any>.*)', '/admin/\g<any>'),
+  ('/web', '/web/dashboard/index'),
+  ('/(?P<any>.*)', '/web/\g<any>')
+)
+routes_out = (
+    ('/admin/(?P<any>.*)', '/web/admin/\g<any>'),
+    ('/web/dashboard/index', '/web'),
+    ('/web/(?P<any>.*)', '/web/\g<any>')
+)
+

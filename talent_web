@@ -1,0 +1,91 @@
+#!/bin/bash
+
+set +x
+
+source ~/.bashrc
+
+# Text color variables
+txtund=$(tput sgr 0 1)          # Underline
+txtbld=$(tput bold)             # Bold
+bldred=${txtbld}$(tput setaf 1) #  red
+bldgrn=${txtbld}$(tput setaf 2) #  green
+bldblu=${txtbld}$(tput setaf 4) #  blue
+bldwht=${txtbld}$(tput setaf 7) #  white
+txtrst=$(tput sgr0)             # Reset
+info=${bldwht}*${txtrst}        # Feedback
+pass=${bldblu}*${txtrst}
+warn=${bldred}*${txtrst}
+ques=${bldblu}?${txtrst}
+
+if [ $# -lt 1 ]; then
+    echo ""
+    echo "Usage: $0 [ modules <install|update> | run <password> ]"
+    echo ""
+    echo "Commands: "
+    echo "$0 modules install"
+    echo "    Installs any missing python modules to your python environment"
+    echo "$0 modules update"
+    echo "    Updates any missing python modules to Talent Web project with modules from your python environment"
+    echo "$0 run <password>"
+    echo "    Runs web2py and Talent Web"
+    echo "$0 run console"
+        echo "    Runs web2py and Talent Web in console mode"
+    echo ""
+    exit
+fi
+
+arg1="$1"
+arg2="$2"
+
+if [ "$arg1" = "modules" ]; then
+    if [ $# -lt 2 ]; then
+        echo ""
+        echo "Usage: $0 modules [ install | update ]"
+        echo ""
+        echo "Commands: "
+        echo "$0 modules install"
+        echo "    Installs any missing python modules to your python environment"
+        echo "$0 modules update"
+        echo "    Updates any missing python modules to Talent Web project with modules from your python environment"
+        echo ""
+        exit
+    elif [ "$arg2" = "install" ]; then
+        pythonbrew venv use talent_web
+        pip install -r python-module-requirements.txt
+        echo "${bldgrn}Installed all required python modules!${txtrst}"
+    elif [ "$arg2" = "update" ]; then
+        pythonbrew venv use talent_web
+        pip freeze -r python-module-requirements.txt > python-module-requirements.txt
+        echo "${bldgrn}Updated Talent Web python modules!${txtrst}"
+    fi
+elif [ "$arg1" = "run" ]; then
+
+    web2py_command=""
+    if [ $# -lt 2 ]; then
+        password="123"
+        web2py_command="python web2py.py -a "$password" -i 127.0.0.1 -p 8000 --no-banner"
+    elif [ "$arg2" = "console" ]; then
+        echo ""
+        echo "${bldgrn}Running in console mode${txtrst}"
+        echo ""
+        web2py_command="python web2py.py -S web -M --no-banner"
+    else
+        password="$2"
+        web2py_command="python web2py.py -a "$password" -i 127.0.0.1 -p 8000 --no-banner"
+    fi
+    
+    pythonbrew venv use talent_web
+    echo ""
+    echo "Checking for required python modules..."
+    pip install -r python-module-requirements.txt -q
+    ssh -N -i ~/.ssh/tunnel_user tunnel_user@184.72.48.47 -L 3307:devdb.gettalent.com:3306 &
+    PID=$!
+    echo ""
+    echo "Now running web2py. Go to ${bldblu}127.0.0.1:8000${txtrst} in your browser. Your web2py admin password is ${bldblu}$password${txtrst}"
+    echo "To manually set a password, use the command:${bldwht} $0 run <password> ${txtrst}"
+    echo "Press ${bldred}CTRL+C${txtrst} to exit. If running console, press ${bldred}CTRL+D${txtrst}"
+    echo ""
+    sleep 1
+    $web2py_command
+    kill $PID
+fi

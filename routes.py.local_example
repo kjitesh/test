@@ -1,0 +1,10 @@
+#Install this file as routes.py ONLY within your local dev environment
+
+default_application = 'web'
+default_controller = 'dashboard'
+default_action = 'index'
+
+routes_onerror = [
+    ('500/*', '/default/error'),
+]
+
