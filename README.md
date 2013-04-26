@@ -39,7 +39,7 @@ Run web2py and Talent Web
 
     #Remember to cd to the web2py folder
     #example:
-    #cd ~/web2py
+    cd ~/web2py
     ./talent_web run <password>
 
 Push to dev (and sync modules)
