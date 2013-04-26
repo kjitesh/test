@@ -25,6 +25,14 @@ Install missing modules
 
 Sync your modules to Talent Web project
 
+    #Remember to activate your talent_web python environment
+    #before installing any python modules
+    pythonbrew venv use talent_web
+
+    #this is an example module that you would install
+    pip install catflip
+
+    #after you're done, run this
     ./talent_web modules update
 
 Run web2py and Talent Web
@@ -112,7 +120,7 @@ and that it's inside the applications folder of web2py.
 
 ### Installing python modules required for Talent Web
 
-cd back into the "web2py" folder, then run the following command:
+cd back into the "web2py" folder, then run the following commands:
 
     #Remember to activate your talent_web python environment
     pythonbrew venv use talent_web
