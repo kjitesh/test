@@ -2689,6 +2689,7 @@ class Auth(object):
                 session.flash = self.messages.email_sent
             else:
                 session.flash = self.messages.unable_to_send_email
+            self.user = user
             self.log_event(log, user)
             callback(onaccept, form)
             if not next:

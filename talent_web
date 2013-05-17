@@ -51,11 +51,11 @@ if [ "$arg1" = "modules" ]; then
         exit
     elif [ "$arg2" = "install" ]; then
         pythonbrew venv use talent_web
-        pip install -r python-module-requirements.txt
+        pip install -r applications/web/python-module-requirements.txt
         echo "${bldgrn}Installed all required python modules!${txtrst}"
     elif [ "$arg2" = "update" ]; then
         pythonbrew venv use talent_web
-        pip freeze -r python-module-requirements.txt > python-module-requirements.txt
+        pip freeze -r applications/web/python-module-requirements.txt > applications/web/python-module-requirements.txt
         echo "${bldgrn}Updated Talent Web python modules!${txtrst}"
     fi
 elif [ "$arg1" = "run" ]; then
@@ -77,7 +77,7 @@ elif [ "$arg1" = "run" ]; then
     pythonbrew venv use talent_web
     echo ""
     echo "Checking for required python modules..."
-    pip install -r python-module-requirements.txt -q
+    pip install -r applications/web/python-module-requirements.txt -q
     ssh -N -i ~/.ssh/tunnel_user tunnel_user@184.72.48.47 -L 3307:devdb.gettalent.com:3306 &
     PID=$!
     echo ""
@@ -85,6 +85,7 @@ elif [ "$arg1" = "run" ]; then
     echo "To manually set a password, use the command:${bldwht} $0 run <password> ${txtrst}"
     echo "Press ${bldred}CTRL+C${txtrst} to exit. If running console, press ${bldred}CTRL+D${txtrst}"
     echo ""
+    echo "$web2py_command"
     sleep 1
     $web2py_command
     kill $PID

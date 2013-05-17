@@ -97,7 +97,7 @@ Git Clone this Github repository in the folder "web2py"
 
     #This is an example directory
     cd ~/
-    git clone git@github.com:Veechi/Web2py.git web2py
+    git clone git@github.com:Veechi/web2py.git web2py
     cd web2py
 
     #Use the local routes.py version
