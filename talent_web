@@ -89,4 +89,7 @@ elif [ "$arg1" = "run" ]; then
     sleep 1
     $web2py_command
     kill $PID
+elif [ "$arg1" = "test" ]; then
+    pythonbrew venv use talent_web
+    py.test -x -v -s applications/web/tests
 fi
