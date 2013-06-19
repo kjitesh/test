@@ -203,6 +203,83 @@ This will sync up any new modules in your talent_web python environment, and add
 
 ### Server-side deployment
 
+#### Upgrading python on a server
+
+    #We need the shared version of python in order to use with mod_wsgi
+    pythonbrew install --configure="--enable-shared" 2.7.2
+
+    #change your LD config to use the new python lib folder
+    echo 'export LD_LIBRARY_PATH=~/.pythonbrew/pythons/Python-2.7.2/lib' >> ~/.bashrc
+    echo 'export LD_RUN_PATH=~/.pythonbrew/pythons/Python-2.7.2/lib' >> ~/.bashrc
+    source ~/.bashrc
+    echo 'include /home/ubuntu/.pythonbrew/pythons/Python-2.7.2/lib' >> /etc/ld.so.conf
+    sudo ldconfig
+
+    #install apache tools for building mod_wsgi
+    sudo apt-get install apache2-dev
+
+    #install modules again
+    pythonbrew venv init
+    pythonbrew venv create talent_web -n
+    pythonbrew venv use talent_web
+
+    #You need to install the new version of pip
+    cd /tmp
+    curl -O https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+    python get-pip.py
+
+    cd /home/www-data/
+    git clone git@github.com:Veechi/web2py.git web2py
+    cd web2py
+
+    #Use the server routes.py version
+    mv routes.py.server_example routes.py
+    touch parameters_433.py
+
+    #install talent web app
+    cd applications/
+    git clone git@github.com:Veechi/Talent-Web.git web
+
+    #install required python modules
+    cd ..
+    chmod a+x talent_web
+    pythonbrew venv use talent_web
+    ./talent_web modules install
+
+    #change permissions of entire web2py folder
+    cd ..
+    sudo chown -R www-data:www-data web2py
+    sudo chmod 2775 web2py
+    find web2py -type d -exec sudo chmod 2775 {} +
+    find web2py -type f -exec sudo chmod 0664 {} +
+
+    #change/set your WSGIPythonHome to use talent_web virtualenv
+    #add or change the line WSGIPythonHome to:
+    #WSGIPythonHome /home/ubuntu/.pythonbrew/venvs/Python-2.7.2/talent_web/
+
+    sudo nano /etc/apache2/httpd.conf
+    WSGIPythonHome /home/ubuntu/.pythonbrew/venvs/Python-2.7.2/talent_web/
+
+    #Download the recommended version of mod_wsgi
+    #3.4 was the recommended version when this document was created - it might be different today
+    cd /tmp
+    wget https://modwsgi.googlecode.com/files/mod_wsgi-3.4.tar.gz
+    tar xvfz mod_wsgi-3.4.tar.gz
+    cd mod_wsgi-3.4/
+    sudo make distclean
+    pythonbrew use 2.7.2
+
+    ./configure
+    #IMPORTANT: make sure that the output of ./configure has the following line:
+    #checking for python... /home/ubuntu/.pythonbrew/venvs/Python-2.7.2/talent_web/bin/python
+    #mod_wsgi needs to be compiled with pythonbrew's 2.7.2
+
+    make
+    sudo make install
+
+    #start apache2, make sure that the app works
+    sudo service apache2 start
+
 #### Pushing a branch to a server
 
     ./talent_web push <server> <branch>
