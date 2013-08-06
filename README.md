@@ -212,7 +212,7 @@ This will sync up any new modules in your talent_web python environment, and add
     echo 'export LD_LIBRARY_PATH=~/.pythonbrew/pythons/Python-2.7.2/lib' >> ~/.bashrc
     echo 'export LD_RUN_PATH=~/.pythonbrew/pythons/Python-2.7.2/lib' >> ~/.bashrc
     source ~/.bashrc
-    echo 'include /home/ubuntu/.pythonbrew/pythons/Python-2.7.2/lib' >> /etc/ld.so.conf
+    echo 'include /home/ubuntu/.pythonbrew/pythons/Python-2.7.2/lib' >> sudo /etc/ld.so.conf
     sudo ldconfig
 
     #install apache tools for building mod_wsgi

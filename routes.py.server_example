@@ -5,7 +5,7 @@ default_controller = 'dashboard'
 default_action = 'index'
 
 routes_onerror = [
-    ('500/*', '/default/error'),
+    ('*/500', '/default/error'),
 ]
 
 
