@@ -2705,7 +2705,7 @@ class Auth(object):
         # link = self.url(self.settings.function,
         #                 args=('reset_password', reset_password_key),
         #                 scheme=True)
-        link = URL(self.settings.function, 'reset_password', reset_password_key, scheme=True)
+        link = URL('user', 'reset_password', reset_password_key, scheme=True)
         if self.settings.mailer.send(
             to=user.email,
             subject=self.messages.reset_password_subject,
