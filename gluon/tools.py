@@ -2703,8 +2703,7 @@ class Auth(object):
     def email_reset_password(self, user):
         reset_password_key = str(int(time.time())) + '-' + web2py_uuid()
         link = self.url(self.settings.function,
-                        args=('reset_password', reset_password_key),
-                        scheme=True)
+                        args=('reset_password', reset_password_key))
         if self.settings.mailer.send(
             to=user.email,
             subject=self.messages.reset_password_subject,
