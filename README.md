@@ -304,3 +304,27 @@ Workflow
 * Pull requests
 
 
+#### Booting up a new server instance
+
+First start up Solr:
+
+    screen
+    cd /home/www-data/solr-4.1.0/talent_web
+    java -Dsolr.solr.home=./candidate/solr/ -jar start.jar
+
+Now look at the scheduler processes:
+
+    ps aux | grep web2py
+    
+* Once the upstart task (GET-57) is resolved, we can remove the following:
+
+If you see a web2py.py process that ends in root, like:
+
+    root       491  0.2  0.2 153352 32024 ?        Ssl  Aug27   2:37 /home/ubuntu/.pythonbrew/venvs/Python-2.7.2/talent_web/bin/python /home/www-data/web2py/web2py.py -K web
+    
+Then kill it and run:
+
+    workon_web2py
+    sudo -u www-data python /home/www-data/web2py/web2py.py -K web
+
+This is because if the scheduler process creates the log file as root, then the normal processes running as www-data won't be able to write to them, causing the app to crash.
