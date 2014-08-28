@@ -326,5 +326,8 @@ Then kill it and run:
 
     workon_web2py
     sudo -u www-data python /home/www-data/web2py/web2py.py -K web
+    <CTRL + Z>
+    bg
+    disown <PID>
 
 This is because if the scheduler process creates the log file as root, then the normal processes running as www-data won't be able to write to them, causing the app to crash.
