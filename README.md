@@ -310,7 +310,8 @@ Workflow
 
 
 
-#### Booting up a new server instance
+Booting up a new server instance
+-------------------------
 
 First start up Solr:
 
