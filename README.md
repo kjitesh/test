@@ -308,6 +308,9 @@ Workflow
 
 4) If the deployment to production causes problems, we will roll back to the previous build by referencing its tag:  http://stackoverflow.com/questions/18345115/how-do-you-revert-to-a-specific-tag-in-git
 
+5) To hotfix, push the changes to master and cherry-pick or merge them into the develop branch.
+
+6) By default, webdev.gettalent.com should be on the 'develop' branch and should have its latest commit.
 
 
 Booting up a new server instance
